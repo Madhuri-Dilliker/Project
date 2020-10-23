@@ -1,0 +1,72 @@
+---
+title: "Healthcare Data"
+output: html_notebook
+---
+
+#dataset : https://www.kaggle.com/allen-institute-for-ai/CORD-19-research-challenge
+
+
+```{r}
+library(tidyverse)
+```
+
+
+
+```{r}
+healthdata <- read.csv("Data/metadata.csv")
+```
+
+
+```{r}
+names(healthdata)
+```
+
+```{r}
+head(healthdata)
+```
+
+#remove some of the empty column 
+
+```{r}
+healthdata_remove <-  subset(healthdata, select = -c(mag_id, who_covidence_id, arxiv_id, s2_id) )
+```
+
+#select some of the column
+```{r}
+healthdata_df <-  healthdata_remove %>% select(cord_uid,sha,source_x,title,doi,pmcid,pubmed_id,license,abstract,publish_time,authors,journal,url)
+```
+
+```{r}
+#write.csv(healthdata_df,"Data/healthdata_df.csv", row.names = FALSE)
+
+```
+
+#Split doi column after first /
+#https://garrettgman.github.io/tidying/
+#https://stackoverflow.com/questions/38108217/split-strings-to-different-columns-based-on-semicolon
+```{r}
+
+healthdata_df1<- separate(healthdata_df, doi, into = c("doi1", "doi2","doi3","doi4","doi5","doi6"))
+
+head(healthdata_df1)
+
+```
+#In authors column change to ; if , is present
+#\\s+ patterns = white space
+#https://stackoverflow.com/questions/51420576/replace-first-comma-with-a-semicolon-into-a-string-using-r-and-regex
+```{r}
+#healthdata_df2 <- gsub(",", ";", sub(";", "", healthdata_df1$authors))
+
+healthdata_df1$authors<-str_replace_all(str_replace(healthdata_df1$authors, ";", ""), ",", ";")
+
+head(healthdata_df1)
+
+```
+
+#change date to mm/dd/yy format
+
+
+```{r}
+
+```
+
